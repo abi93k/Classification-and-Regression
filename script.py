@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import pickle
 import sys
 
-def ldaLearn(X,y):
+def ldaLearn(X,y): # problem 1 (arjunsun)
     # Inputs
     # X - a N x d matrix with each row corresponding to a training example
     # y - a N x 1 column vector indicating the labels for each training example
@@ -21,7 +21,7 @@ def ldaLearn(X,y):
     
     return means,covmat
 
-def qdaLearn(X,y):
+def qdaLearn(X,y): # problem 1 (arjunsun)
     # Inputs
     # X - a N x d matrix with each row corresponding to a training example
     # y - a N x 1 column vector indicating the labels for each training example
@@ -34,7 +34,7 @@ def qdaLearn(X,y):
     
     return means,covmats
 
-def ldaTest(means,covmat,Xtest,ytest):
+def ldaTest(means,covmat,Xtest,ytest): # problem 1 (arjunsun)
     # Inputs
     # means, covmat - parameters of the LDA model
     # Xtest - a N x d matrix with each row corresponding to a test example
@@ -45,7 +45,7 @@ def ldaTest(means,covmat,Xtest,ytest):
     # IMPLEMENT THIS METHOD
     return acc
 
-def qdaTest(means,covmats,Xtest,ytest):
+def qdaTest(means,covmats,Xtest,ytest): # problem 1 (arjunsun)
     # Inputs
     # means, covmats - parameters of the QDA model
     # Xtest - a N x d matrix with each row corresponding to a test example
@@ -56,7 +56,7 @@ def qdaTest(means,covmats,Xtest,ytest):
     # IMPLEMENT THIS METHOD
     return acc
 
-def learnOLERegression(X,y):
+def learnOLERegression(X,y): # problem 2 (akannan4)
     # Inputs:                                                         
     # X = N x d 
     # y = N x 1                                                               
@@ -65,7 +65,7 @@ def learnOLERegression(X,y):
     # IMPLEMENT THIS METHOD                                                   
     return w
 
-def learnRidgeERegression(X,y,lambd):
+def learnRidgeERegression(X,y,lambd): # problem 3 (akannan4)
     # Inputs:
     # X = N x d                                                               
     # y = N x 1 
@@ -76,7 +76,7 @@ def learnRidgeERegression(X,y,lambd):
     # IMPLEMENT THIS METHOD                                                   
     return w
 
-def testOLERegression(w,Xtest,ytest):
+def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # Inputs:
     # w = d x 1
     # Xtest = N x d
@@ -87,7 +87,7 @@ def testOLERegression(w,Xtest,ytest):
     # IMPLEMENT THIS METHOD
     return rmse
 
-def regressionObjVal(w, X, y, lambd):
+def regressionObjVal(w, X, y, lambd): # problem 4 (sammok)
 
     # compute squared error (scalar) and gradient of squared error with respect
     # to w (vector) for the given data X and y and the regularization parameter
@@ -96,9 +96,9 @@ def regressionObjVal(w, X, y, lambd):
     # IMPLEMENT THIS METHOD                                             
     return error, error_grad
 
-def mapNonLinear(x,p):
+def mapNonLinear(x,p): # problem 5 (sammok)
     # Inputs:                                                                  
-    # x - a single column vector (N x 1)                                       
+    # x - a single column vector (N x 1)                                   
     # p - integer (>= 0)                                                       
     # Outputs:                                                                 
     # Xd - (N x (d+1))                                                         
