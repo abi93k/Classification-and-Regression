@@ -62,7 +62,9 @@ def learnOLERegression(X,y): # problem 2 (akannan4)
     # y = N x 1                                                               
     # Output: 
     # w = d x 1                                                                
-    # IMPLEMENT THIS METHOD                                                   
+    # IMPLEMENT THIS METHOD   
+
+    # w = (X^T.X)^(-1).(X^T.Y)                                                
     return w
 
 def learnRidgeERegression(X,y,lambd): # problem 3 (akannan4)
@@ -73,7 +75,10 @@ def learnRidgeERegression(X,y,lambd): # problem 3 (akannan4)
     # Output:                                                                  
     # w = d x 1                                                                
 
-    # IMPLEMENT THIS METHOD                                                   
+    # IMPLEMENT THIS METHOD
+
+    # w = ((X^T.X)^(-1) + lambd * N * identity(d)).(X^T.Y)
+
     return w
 
 def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
@@ -85,6 +90,10 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # rmse
     
     # IMPLEMENT THIS METHOD
+
+    # RMSE = (SQRT(SUM((ytest^T - (w^T.Xtest^T))^2)))/N
+
+
     return rmse
 
 def regressionObjVal(w, X, y, lambd): # problem 4 (sammok)
