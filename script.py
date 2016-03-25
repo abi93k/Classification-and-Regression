@@ -34,27 +34,29 @@ def qdaLearn(X,y): # problem 1 (arjunsun)
     
     return means,covmats
 
-def ldaTest(means,covmat,Xtest,ytest): # problem 1 (arjunsun)
+def ldaTest(means,covmat,Xtest,ytest):
     # Inputs
     # means, covmat - parameters of the LDA model
     # Xtest - a N x d matrix with each row corresponding to a test example
     # ytest - a N x 1 column vector indicating the labels for each test example
     # Outputs
     # acc - A scalar accuracy value
-    
-    # IMPLEMENT THIS METHOD
-    return acc
+    # ypred - N x 1 column vector indicating the predicted labels
 
-def qdaTest(means,covmats,Xtest,ytest): # problem 1 (arjunsun)
+    # IMPLEMENT THIS METHOD
+    return acc,ypred
+
+def qdaTest(means,covmats,Xtest,ytest):
     # Inputs
     # means, covmats - parameters of the QDA model
     # Xtest - a N x d matrix with each row corresponding to a test example
     # ytest - a N x 1 column vector indicating the labels for each test example
     # Outputs
     # acc - A scalar accuracy value
-    
+    # ypred - N x 1 column vector indicating the predicted labels
+
     # IMPLEMENT THIS METHOD
-    return acc
+    return acc,ypred
 
 def learnOLERegression(X,y): # problem 2 (akannan4)
     # Inputs:                                                         
@@ -125,11 +127,11 @@ else:
 
 # LDA
 means,covmat = ldaLearn(X,y)
-ldaacc = ldaTest(means,covmat,Xtest,ytest)
+ldaacc,pred = ldaTest(means,covmat,Xtest,ytest)
 print('LDA Accuracy = '+str(ldaacc))
 # QDA
 means,covmats = qdaLearn(X,y)
-qdaacc = qdaTest(means,covmats,Xtest,ytest)
+qdaacc,pred = qdaTest(means,covmats,Xtest,ytest)
 print('QDA Accuracy = '+str(qdaacc))
 
 # plotting boundaries
