@@ -69,7 +69,7 @@ def learnOLERegression(X,y): # problem 2 (akannan4)
     # w = (X^T.X)^(-1).(X^T.Y)                                                
     return w
 
-def learnRidgeERegression(X,y,lambd): # problem 3 (akannan4)
+def learnRidgeRegression(X,y,lambd): # problem 3 (akannan4)
     # Inputs:
     # X = N x d                                                               
     # y = N x 1 
