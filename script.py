@@ -105,11 +105,13 @@ def regressionObjVal(w, X, y, lambd): # problem 4 (sammokka)
     
     
     #error_gradient
-    I = np.identity((X.shape())[0])
-    p1 = np.invert(np.add(np.multiply(np.transpose(X), X),np.multiply(lambd, I)))
-    p2 = np.multiply(np.transpose(X), y)
-    error_grad = np.multiply(p1,p2)
-    
+#     I = np.identity((X.shape())[0])
+#     p1 = np.invert(np.add(np.multiply(np.transpose(X), X),np.multiply(lambd, I)))
+#     p2 = np.multiply(np.transpose(X), y)
+#     error_grad = np.multiply(p1,p2)
+
+
+    error_grad = np.add(np.multiply(np.transpose(X), np.subtract(np.multiply(X, w), y)), np.multiply(lambd, w))
     # IMPLEMENT THIS METHOD                       
     return error, error_grad
 
