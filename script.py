@@ -103,8 +103,16 @@ def mapNonLinear(x,p): # problem 5 (sammok)
     # x - a single column vector (N x 1)                                   
     # p - integer (>= 0)                                                       
     # Outputs:                                                                 
-    # Xd - (N x (d+1))                                                         
+    # Xd - dimensions : (N x (p+1))  
+    # where N is number of rows of X                                                       
     # IMPLEMENT THIS METHOD
+    
+    #notes: problem 5.
+    N=(x.shape)[0]
+    print(N)
+    a = np.empty([N,p+1], dtype=int)
+    for i in range(p+1):
+        a[:,i] = np.power(x,i)
     return Xd
 
 # Main script
