@@ -66,7 +66,7 @@ def learnOLERegression(X,y): # problem 2 (arjunsun)
     # w = d x 1                                                                
     # IMPLEMENT THIS METHOD
     Xtran=np.transpose(X)
-    w=1/np.multiply(Xtran,X)
+    w=no.inverse(np.multiply(Xtran,X))
     w=np.multiply(np.multiply(w,Xtran),y)                                                 
     return w
 
@@ -81,7 +81,7 @@ def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
     # IMPLEMENT THIS METHOD
     Xtran=np.transpose(X)
     i=np.identity(X.shape(1))
-    w=1/(np.multiply(Xtran,X)+np.multiply(lamdb,i))
+    w=np.inverse(np.multiply(Xtran,X)+np.multiply(lamdb,i))
     w=np.multiply(np.multiply(w,Xtran),y)                                                   
     return w
 
