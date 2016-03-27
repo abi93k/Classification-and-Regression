@@ -64,7 +64,10 @@ def learnOLERegression(X,y): # problem 2 (arjunsun)
     # y = N x 1                                                               
     # Output: 
     # w = d x 1                                                                
-    # IMPLEMENT THIS METHOD                                                   
+    # IMPLEMENT THIS METHOD
+    Xtran=np.transpose(X)
+    w=1/(Xtran*X)
+    w=w*Xtran*y	                                                   
     return w
 
 def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
@@ -75,8 +78,13 @@ def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
     # Output:                                                                  
     # w = d x 1                                                                
 
-    # IMPLEMENT THIS METHOD                                                   
+    # IMPLEMENT THIS METHOD
+    Xtran=np.transpose(X)
+    i=np.identity(X.shape(1))
+    w=1/((Xtran*X)+(lamdb*I))
+    w=w*Xtran*y                                                   
     return w
+
 
 def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # Inputs:
@@ -86,7 +94,11 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # Output:
     # rmse
     
-    # IMPLEMENT THIS METHOD
+    # IMPLEMENT THIS	 METHOD
+    wTran=np.transpose(w)
+    N=Xtest.shape(0)
+    rmse=np.sum(ytest-(wTran*Xtest));
+    rmse=np.sqrt(rmse/N)
     return rmse
 
 def regressionObjVal(w, X, y, lambd): # problem 4 (sammok)
