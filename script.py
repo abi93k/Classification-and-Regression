@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import pickle
 import sys
 
-def ldaLearn(X,y): # problem 1 (arjunsun)
+def ldaLearn(X,y): # problem 1 (akannan4)
     # Inputs
     # X - a N x d matrix with each row corresponding to a training example
     # y - a N x 1 column vector indicating the labels for each training example
@@ -21,7 +21,7 @@ def ldaLearn(X,y): # problem 1 (arjunsun)
     
     return means,covmat
 
-def qdaLearn(X,y): # problem 1 (arjunsun)
+def qdaLearn(X,y): # problem 1 (akannan4)
     # Inputs
     # X - a N x d matrix with each row corresponding to a training example
     # y - a N x 1 column vector indicating the labels for each training example
@@ -34,7 +34,7 @@ def qdaLearn(X,y): # problem 1 (arjunsun)
     
     return means,covmats
 
-def ldaTest(means,covmat,Xtest,ytest):
+def ldaTest(means,covmat,Xtest,ytest): # problem 1 (akannan4)
     # Inputs
     # means, covmat - parameters of the LDA model
     # Xtest - a N x d matrix with each row corresponding to a test example
@@ -46,7 +46,7 @@ def ldaTest(means,covmat,Xtest,ytest):
     # IMPLEMENT THIS METHOD
     return acc,ypred
 
-def qdaTest(means,covmats,Xtest,ytest):
+def qdaTest(means,covmats,Xtest,ytest): # problem 1 (akannan4)
     # Inputs
     # means, covmats - parameters of the QDA model
     # Xtest - a N x d matrix with each row corresponding to a test example
@@ -58,7 +58,7 @@ def qdaTest(means,covmats,Xtest,ytest):
     # IMPLEMENT THIS METHOD
     return acc,ypred
 
-def learnOLERegression(X,y): # problem 2 (akannan4)
+def learnOLERegression(X,y): # problem 2 (arjunsun)
     # Inputs:                                                         
     # X = N x d 
     # y = N x 1                                                               
@@ -67,7 +67,7 @@ def learnOLERegression(X,y): # problem 2 (akannan4)
     # IMPLEMENT THIS METHOD                                                   
     return w
 
-def learnRidgeRegression(X,y,lambd): # problem 3 (akannan4)
+def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
     # Inputs:
     # X = N x d                                                               
     # y = N x 1 
