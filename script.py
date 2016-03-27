@@ -97,15 +97,19 @@ def regressionObjVal(w, X, y, lambd): # problem 4 (sammokka)
     
     #notes:equation 5 in asst problem statement
 
-    Xw = np.multiply(X,w)
-    y_minus_Xw = np.subtract(y, Xw)
-    t1 = np.multiply(np.transpose(y_minus_Xw), y_minus_Xw)
-    t1 = np.multiply(0.5, t1)
-    t2 = np.multiply(0.5, lambd)
-    wtw = np.multiply(np.transpose(w), w)
-    t2 = np.multiply(t2, wtw)
+    #error function
+    y_minus_Xw = np.subtract(y, np.multiply(X,w))
+    t1 = np.multiply(0.5,np.multiply(np.transpose(y_minus_Xw), y_minus_Xw))
+    t2 = np.multiply(np.multiply(0.5, lambd),np.multiply(np.transpose(w), w))
     error = np.add(t1,t2)
-
+    
+    
+    #error_gradient
+    I = np.identity((X.shape())[0])
+    p1 = np.invert(np.add(np.multiply(np.transpose(X), X),np.multiply(lambd, I)))
+    p2 = np.multiply(np.transpose(X), y)
+    error_grad = np.multiply(p1,p2)
+    
     # IMPLEMENT THIS METHOD                       
     return error, error_grad
 
