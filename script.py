@@ -89,16 +89,27 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # IMPLEMENT THIS METHOD
     return rmse
 
-def regressionObjVal(w, X, y, lambd): # problem 4 (sammok)
+def regressionObjVal(w, X, y, lambd): # problem 4 (sammokka)
 
     # compute squared error (scalar) and gradient of squared error with respect
     # to w (vector) for the given data X and y and the regularization parameter
     # lambda                                                                  
+    
+    #notes:equation 5 in asst problem statement
 
-    # IMPLEMENT THIS METHOD                                             
+    Xw = np.multiply(X,w)
+    y_minus_Xw = np.subtract(y, Xw)
+    t1 = np.multiply(np.transpose(y_minus_Xw), y_minus_Xw)
+    t1 = np.multiply(0.5, t1)
+    t2 = np.multiply(0.5, lambd)
+    wtw = np.multiply(np.transpose(w), w)
+    t2 = np.multiply(t2, wtw)
+    error = np.add(t1,t2)
+
+    # IMPLEMENT THIS METHOD                       
     return error, error_grad
 
-def mapNonLinear(x,p): # problem 5 (sammok)
+def mapNonLinear(x,p): # problem 5 (sammokka)
     # Inputs:                                                                  
     # x - a single column vector (N x 1)                                   
     # p - integer (>= 0)                                                       
@@ -113,7 +124,7 @@ def mapNonLinear(x,p): # problem 5 (sammok)
     a = np.empty([N,p+1], dtype=int)
     for i in range(p+1):
         a[:,i] = np.power(x,i)
-    return Xd
+    return a
 
 # Main script
 
