@@ -132,6 +132,7 @@ def qdaTest(means,covmats,Xtest,ytest): # problem 1 (akannan4)
 
     return acc,ypred
 
+
 def learnOLERegression(X,y): # problem 2 (arjunsun)
     # Inputs:                                                         
     # X = N x d 
@@ -154,7 +155,6 @@ def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
     # lambd = ridge parameter (scalar)
     # Output:                                                                  
     # w = d x 1                                                                
-
 
     # w = (((X^T.X) + lambd * identity(d)) ^ -1 ).(X^T.Y)
 
@@ -185,23 +185,56 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
 
     return rmse
 
-def regressionObjVal(w, X, y, lambd): # problem 4 (sammok)
+def regressionObjVal(w, X, y, lambd): # problem 4 (sammokka)
 
     # compute squared error (scalar) and gradient of squared error with respect
     # to w (vector) for the given data X and y and the regularization parameter
     # lambda                                                                  
+    
+    #notes:equation 5 in asst problem statement
 
-    # IMPLEMENT THIS METHOD                                             
+    #error function
+    y_minus_Xw = np.subtract(y, np.dot(X,w))
+    t1 = np.dot(0.5,np.dot(np.transpose(y_minus_Xw), y_minus_Xw))
+    t2 = np.dot(np.dot(0.5, lambd),np.dot(np.transpose(w), w))
+    error = np.add(t1,t2)
+    
+    
+    #error_gradient
+#     I = np.identity((X.shape())[0])
+#     p1 = np.invert(np.add(np.multiply(np.transpose(X), X),np.multiply(lambd, I)))
+#     p2 = np.multiply(np.transpose(X), y)
+#     error_grad = np.multiply(p1,p2)
+
+    t1_p1 = np.transpose(X)
+    t1_p2 = np.subtract(np.dot(X, w), y)
+    t1 = np.dot(t1_p1,t1_p2)
+    t2 = np.dot(lambd, w)
+    print(lambd.shape)
+    print(w.shape)
+    
+    error_grad = np.add(t1,t2)
+    
+#     error_grad = np.add(np.dot(np.transpose(X), np.subtract(np.dot(X, w), y)), np.dot(lambd, w))
+    # IMPLEMENT THIS METHOD                       
     return error, error_grad
 
-def mapNonLinear(x,p): # problem 5 (sammok)
+def mapNonLinear(x,p): # problem 5 (sammokka)
     # Inputs:                                                                  
     # x - a single column vector (N x 1)                                   
     # p - integer (>= 0)                                                       
     # Outputs:                                                                 
-    # Xd - (N x (d+1))                                                         
+    # Xd - dimensions : (N x (p+1))  
+    # where N is number of rows of X                                                       
     # IMPLEMENT THIS METHOD
-    return Xd
+    
+    #notes: problem 5.
+    N=(x.shape)[0]
+    print(N)
+    a = np.empty([N,p+1], dtype=int)
+    for i in range(p+1):
+        a[:,i] = np.power(x,i)
+    return a
 
 # Main script
 
@@ -233,11 +266,12 @@ zacc,zldares = ldaTest(means,covmat,xx,np.zeros((xx.shape[0],1)))
 plt.contourf(x1,x2,zldares.reshape((x1.shape[0],x2.shape[0])))
 plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
 
-#plt.show()
+plt.show()
 
 zacc,zqdares = qdaTest(means,covmats,xx,np.zeros((xx.shape[0],1)))
 plt.contourf(x1,x2,zqdares.reshape((x1.shape[0],x2.shape[0])))
 plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
+
 # Problem 2
 
 if sys.version_info.major == 2:
@@ -267,13 +301,12 @@ k = 101
 lambdas = np.linspace(0, 1, num=k)
 i = 0
 rmses3 = np.zeros((k,1))
-rmses3_train = np.zeros((k,1))
 for lambd in lambdas:
     w_l = learnRidgeRegression(X_i,y,lambd)
     rmses3[i] = testOLERegression(w_l,Xtest_i,ytest)
     i = i + 1
-plt.plot(lambdas,rmses3_train)
-plt.show()
+plt.plot(lambdas,rmses3)
+
 # Problem 4
 k = 101
 lambdas = np.linspace(0, 1, num=k)
