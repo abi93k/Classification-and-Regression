@@ -174,7 +174,6 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # Output:
     # rmse
     
-
     # RMSE = (SQRT(SUM((ytest^T - (w^T.Xtest^T))^2)))/N
 
     wTran=np.transpose(w)
@@ -183,7 +182,7 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     N=Xtest.shape[0]
     rmse=np.sum(np.square(np.subtract(yTran,np.dot(wTran,Xtran))))
     rmse=np.sqrt(rmse/N)
-    #rmse=rmse/N
+
     return rmse
 
 def regressionObjVal(w, X, y, lambd): # problem 4 (sammok)
@@ -208,7 +207,6 @@ def mapNonLinear(x,p): # problem 5 (sammok)
 
 # Problem 1
 # load the sample data                                                                 
-"""
 if sys.version_info.major == 2:
     X,y,Xtest,ytest = pickle.load(open('sample.pickle','rb'))
 else:
@@ -240,7 +238,6 @@ plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
 zacc,zqdares = qdaTest(means,covmats,xx,np.zeros((xx.shape[0],1)))
 plt.contourf(x1,x2,zqdares.reshape((x1.shape[0],x2.shape[0])))
 plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
-"""
 # Problem 2
 
 if sys.version_info.major == 2:
@@ -253,14 +250,18 @@ X_i = np.concatenate((np.ones((X.shape[0],1)), X), axis=1)
 Xtest_i = np.concatenate((np.ones((Xtest.shape[0],1)), Xtest), axis=1)
 
 w = learnOLERegression(X,y)
-mle = testOLERegression(w,X,y)
+mle_train = testOLERegression(w,X,y)
+mle = testOLERegression(w,Xtest,ytest)
 
 w_i = learnOLERegression(X_i,y)
-mle_i = testOLERegression(w_i,X_i,y)
+mle_i_train = testOLERegression(w_i,X_i,y)
+mle_i = testOLERegression(w_i,Xtest_i,ytest)
 
-print('RMSE without intercept '+str(mle))
-print('RMSE with intercept '+str(mle_i))
-
+print('RMSE without intercept for training data '+str(mle_train))
+print('RMSE with intercept for training data '+str(mle_i_train))
+print('RMSE without intercept for testing data '+str(mle))
+print('RMSE with intercept for testing data '+str(mle_i))
+"""
 # Problem 3
 k = 101
 lambdas = np.linspace(0, 1, num=k)
@@ -273,7 +274,6 @@ for lambd in lambdas:
     i = i + 1
 plt.plot(lambdas,rmses3_train)
 plt.show()
-"""
 # Problem 4
 k = 101
 lambdas = np.linspace(0, 1, num=k)
