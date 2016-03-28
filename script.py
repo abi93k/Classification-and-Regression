@@ -67,9 +67,9 @@ def learnOLERegression(X,y): # problem 2 (arjunsun)
     # w = (X^T.X)^(-1).(X^T.Y)  
 
     Xtran=np.transpose(X)
-    w=np.inverse(np.multiply(Xtran,X))
-    w=np.multiply(np.multiply(w,Xtran),y)
-
+    w=np.linalg.inv(np.dot(Xtran,X))
+    w=np.dot(np.dot(w,Xtran),y)
+    
     return w
 
 def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
@@ -84,8 +84,8 @@ def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
 
     Xtran=np.transpose(X)
     i=np.identity(X.shape[1])
-    w=np.inverse(np.multiply(Xtran,X)+np.multiply(lamdb,i))
-    w=np.multiply(np.multiply(w,Xtran),y)
+    w=np.linalg.inv(np.dot(Xtran,X)+np.dot(lambd,i))
+    w=np.dot(np.dot(w,Xtran),y)
 
     return w
 
@@ -101,9 +101,12 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # RMSE = (SQRT(SUM((ytest^T - (w^T.Xtest^T))^2)))/N
 
     wTran=np.transpose(w)
-    N=Xtest.shape(0)
-    rmse=np.sum(ytest-np.multiply(wTran,Xtest));
+    Xtran=np.transpose(Xtest)
+    yTran=np.transpose(ytest)
+    N=Xtest.shape[0]
+    rmse=np.sum(np.square(np.subtract(yTran,np.dot(wTran,Xtran))))
     rmse=np.sqrt(rmse/N)
+    #rmse=rmse/N
     return rmse
 
 def regressionObjVal(w, X, y, lambd): # problem 4 (sammok)
@@ -173,10 +176,10 @@ X_i = np.concatenate((np.ones((X.shape[0],1)), X), axis=1)
 Xtest_i = np.concatenate((np.ones((Xtest.shape[0],1)), Xtest), axis=1)
 
 w = learnOLERegression(X,y)
-mle = testOLERegression(w,Xtest,ytest)
+mle = testOLERegression(w,X,y)
 
 w_i = learnOLERegression(X_i,y)
-mle_i = testOLERegression(w_i,Xtest_i,ytest)
+mle_i = testOLERegression(w_i,X_i,y)
 
 print('RMSE without intercept '+str(mle))
 print('RMSE with intercept '+str(mle_i))
