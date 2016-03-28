@@ -64,10 +64,12 @@ def learnOLERegression(X,y): # problem 2 (arjunsun)
     # y = N x 1                                                               
     # Output: 
     # w = d x 1                                                                
-    # IMPLEMENT THIS METHOD
+    # w = (X^T.X)^(-1).(X^T.Y)  
+
     Xtran=np.transpose(X)
-    w=no.inverse(np.multiply(Xtran,X))
-    w=np.multiply(np.multiply(w,Xtran),y)                                                 
+    w=np.inverse(np.multiply(Xtran,X))
+    w=np.multiply(np.multiply(w,Xtran),y)
+
     return w
 
 def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
@@ -78,11 +80,13 @@ def learnRidgeRegression(X,y,lambd): # problem 3 (arjunsun)
     # Output:                                                                  
     # w = d x 1                                                                
 
-    # IMPLEMENT THIS METHOD
+    # w = (((X^T.X) + lambd * identity(d)) ^ -1 ).(X^T.Y)
+
     Xtran=np.transpose(X)
-    i=np.identity(X.shape(1))
+    i=np.identity(X.shape[1])
     w=np.inverse(np.multiply(Xtran,X)+np.multiply(lamdb,i))
-    w=np.multiply(np.multiply(w,Xtran),y)                                                   
+    w=np.multiply(np.multiply(w,Xtran),y)
+
     return w
 
 
@@ -94,7 +98,8 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # Output:
     # rmse
     
-    # IMPLEMENT THIS	 METHOD
+    # RMSE = (SQRT(SUM((ytest^T - (w^T.Xtest^T))^2)))/N
+
     wTran=np.transpose(w)
     N=Xtest.shape(0)
     rmse=np.sum(ytest-np.multiply(wTran,Xtest));
@@ -123,6 +128,7 @@ def mapNonLinear(x,p): # problem 5 (sammok)
 
 # Problem 1
 # load the sample data                                                                 
+"""
 if sys.version_info.major == 2:
     X,y,Xtest,ytest = pickle.load(open('sample.pickle','rb'))
 else:
@@ -154,7 +160,7 @@ plt.show()
 zacc,zqdares = qdaTest(means,covmats,xx,np.zeros((xx.shape[0],1)))
 plt.contourf(x1,x2,zqdares.reshape((x1.shape[0],x2.shape[0])))
 plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
-
+"""
 # Problem 2
 
 if sys.version_info.major == 2:
@@ -185,7 +191,7 @@ for lambd in lambdas:
     rmses3[i] = testOLERegression(w_l,Xtest_i,ytest)
     i = i + 1
 plt.plot(lambdas,rmses3)
-
+"""
 # Problem 4
 k = 101
 lambdas = np.linspace(0, 1, num=k)
@@ -216,3 +222,4 @@ for p in range(pmax):
     rmses5[p,1] = testOLERegression(w_d2,Xdtest,ytest)
 plt.plot(range(pmax),rmses5)
 plt.legend(('No Regularization','Regularization'))
+"""
