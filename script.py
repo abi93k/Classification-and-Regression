@@ -189,11 +189,13 @@ k = 101
 lambdas = np.linspace(0, 1, num=k)
 i = 0
 rmses3 = np.zeros((k,1))
+rmses3_train = np.zeros((k,1))
 for lambd in lambdas:
     w_l = learnRidgeRegression(X_i,y,lambd)
     rmses3[i] = testOLERegression(w_l,Xtest_i,ytest)
     i = i + 1
-plt.plot(lambdas,rmses3)
+plt.plot(lambdas,rmses3_train)
+plt.show()
 """
 # Problem 4
 k = 101
