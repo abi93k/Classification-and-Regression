@@ -16,9 +16,23 @@ def ldaLearn(X,y): # problem 1 (akannan4)
     # Outputs
     # means - A d x k matrix containing learnt means for each of the k classes
     # covmat - A single d x d learnt covariance matrix 
-    
-    # IMPLEMENT THIS METHOD
-    
+   
+    # Handouts B.3 page 6      
+
+    N,d = X.shape
+    labels = y.reshape(y.size)
+    classes = np.unique(labels)
+    no_of_classes = classes.shape[0]
+    k = no_of_classes
+
+    means = np.zeros((d, k))
+
+    for cl in range(k):
+        XTarget = X[labels == classes[cl]]
+        means[:, cl] = np.mean(XTarget, axis=0)
+
+    covmat = np.cov(np.transpose(X))
+
     return means,covmat
 
 def qdaLearn(X,y): # problem 1 (akannan4)
@@ -30,7 +44,22 @@ def qdaLearn(X,y): # problem 1 (akannan4)
     # means - A d x k matrix containing learnt means for each of the k classes
     # covmats - A list of k d x d learnt covariance matrices for each of the k classes
     
-    # IMPLEMENT THIS METHOD
+    # Handouts B.3 page 6
+
+    N,d = X.shape
+    labels = y.reshape(y.size)
+    classes = np.unique(labels)
+    no_of_classes = classes.shape[0]
+    k = no_of_classes
+
+    means = np.zeros((d, k))
+    covmats = [np.zeros((d,d))]* k
+
+    for cl in range(k):
+        XTarget = X[labels == classes[cl]]
+        means[:, cl] = np.mean(XTarget, axis=0)
+        covmats[cl] = np.cov(np.transpose(XTarget))
+
     
     return means,covmats
 
@@ -43,7 +72,29 @@ def ldaTest(means,covmat,Xtest,ytest): # problem 1 (akannan4)
     # acc - A scalar accuracy value
     # ypred - N x 1 column vector indicating the predicted labels
 
-    # IMPLEMENT THIS METHOD
+    # Handouts B.3 page 6
+
+    N,d = Xtest.shape
+    _,k = means.shape
+    det_covmat = np.linalg.det(covmat)
+    inv_covmat = np.linalg.inv(covmat)
+
+    p = np.zeros((N, k))
+
+    for cl in range(k):
+        divisor = (np.power(np.pi * 2,d/2) * (np.power(det_covmat, 0.5)))
+        c1 = Xtest - means[:, cl]
+        c2 = np.dot(inv_covmat, c1.T)
+        c3 = np.sum(c1 * c2.T, axis = 1)
+        dividend = np.exp(-0.5 * c3)
+        p[:, cl] = dividend / divisor
+
+    ypred = np.argmax(p, 1)
+    ypred += 1
+    ytest = ytest.reshape(ytest.size)
+
+    acc = np.mean(ypred == ytest) * 100
+
     return acc,ypred
 
 def qdaTest(means,covmats,Xtest,ytest): # problem 1 (akannan4)
@@ -55,7 +106,30 @@ def qdaTest(means,covmats,Xtest,ytest): # problem 1 (akannan4)
     # acc - A scalar accuracy value
     # ypred - N x 1 column vector indicating the predicted labels
 
-    # IMPLEMENT THIS METHOD
+    # Handouts B.3 page 6
+
+    N,d = Xtest.shape
+    _,k = means.shape
+
+
+    p = np.zeros((N, k))
+
+    for cl in range(k):
+        det_covmat = np.linalg.det(covmats[cl])
+        inv_covmat = np.linalg.inv(covmats[cl])
+        divisor = (np.power(np.pi * 2,d/2) * (np.power(det_covmat, 0.5)))
+        c1 = Xtest - means[:, cl]
+        c2 = np.dot(inv_covmat, c1.T)
+        c3 = np.sum(c1 * c2.T, axis = 1)
+        dividend = np.exp(-0.5 * c3)
+        p[:, cl] = dividend / divisor
+
+    ypred = np.argmax(p, 1)
+    ypred += 1
+    ytest = ytest.reshape(ytest.size)
+
+    acc = np.mean(ypred == ytest) * 100
+
     return acc,ypred
 
 def learnOLERegression(X,y): # problem 2 (arjunsun)
@@ -146,12 +220,12 @@ zacc,zldares = ldaTest(means,covmat,xx,np.zeros((xx.shape[0],1)))
 plt.contourf(x1,x2,zldares.reshape((x1.shape[0],x2.shape[0])))
 plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
 
-plt.show()
+#plt.show()
 
 zacc,zqdares = qdaTest(means,covmats,xx,np.zeros((xx.shape[0],1)))
 plt.contourf(x1,x2,zqdares.reshape((x1.shape[0],x2.shape[0])))
 plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
-
+"""
 # Problem 2
 
 if sys.version_info.major == 2:
@@ -213,3 +287,4 @@ for p in range(pmax):
     rmses5[p,1] = testOLERegression(w_d2,Xdtest,ytest)
 plt.plot(range(pmax),rmses5)
 plt.legend(('No Regularization','Regularization'))
+"""
