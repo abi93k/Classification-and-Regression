@@ -7,6 +7,8 @@ import scipy.io
 import matplotlib.pyplot as plt
 import pickle
 import sys
+import csv
+
 
 def ldaLearn(X,y): # problem 1 (akannan4)
     # Inputs
@@ -31,7 +33,7 @@ def ldaLearn(X,y): # problem 1 (akannan4)
         XTarget = X[labels == classes[cl]]
         means[:, cl] = np.mean(XTarget, axis=0)
 
-    covmat = np.cov(np.transpose(X))
+    covmat = np.cov(X.T)
 
     return means,covmat
 
@@ -58,7 +60,7 @@ def qdaLearn(X,y): # problem 1 (akannan4)
     for cl in range(k):
         XTarget = X[labels == classes[cl]]
         means[:, cl] = np.mean(XTarget, axis=0)
-        covmats[cl] = np.cov(np.transpose(XTarget))
+        covmats[cl] = np.cov(XTarget.T)
 
     
     return means,covmats
@@ -174,7 +176,7 @@ def testOLERegression(w,Xtest,ytest): # problem 2 (akannan4)
     # Output:
     # rmse
     
-    # RMSE = (SQRT(SUM((ytest^T - (w^T.Xtest^T))^2)))/N
+    #RMSE = (SQRT(SUM((ytest^T - (w^T.Xtest^T))^2)/N))
 
     wTran=np.transpose(w)
     Xtran=np.transpose(Xtest)
@@ -191,33 +193,25 @@ def regressionObjVal(w, X, y, lambd): # problem 4 (sammokka)
     # to w (vector) for the given data X and y and the regularization parameter
     # lambda                                                                  
     
-    #notes:equation 5 in asst problem statement
+    # error = equation (4) in project-description
 
-    #error function
-    y_minus_Xw = np.subtract(y, np.dot(X,w))
-    t1 = np.dot(0.5,np.dot(np.transpose(y_minus_Xw), y_minus_Xw))
-    t2 = np.dot(np.dot(0.5, lambd),np.dot(np.transpose(w), w))
-    error = np.add(t1,t2)
-    
-    
-    #error_gradient
-#     I = np.identity((X.shape())[0])
-#     p1 = np.invert(np.add(np.multiply(np.transpose(X), X),np.multiply(lambd, I)))
-#     p2 = np.multiply(np.transpose(X), y)
-#     error_grad = np.multiply(p1,p2)
+    w = w.reshape(65,1)
 
-    t1_p1 = np.transpose(X)
-    t1_p2 = np.subtract(np.dot(X, w), y)
-    t1 = np.dot(t1_p1,t1_p2)
-    t2 = np.dot(lambd, w)
-    print(lambd.shape)
-    print(w.shape)
+    a= y-np.dot(X,w)
+    error = (0.5*np.dot(a.transpose(),a)) + 0.5*lambd* np.dot(w.transpose(),w)
+
+    a = np.dot(X.T,X)
+    b = np.dot(a,w)
+
+    c = np.dot(X.T,y)
+
+    d  = lambd * w
+
+    error_grad = (b - c + d).flatten()
+
     
-    error_grad = np.add(t1,t2)
-    
-#     error_grad = np.add(np.dot(np.transpose(X), np.subtract(np.dot(X, w), y)), np.dot(lambd, w))
-    # IMPLEMENT THIS METHOD                       
     return error, error_grad
+
 
 def mapNonLinear(x,p): # problem 5 (sammokka)
     # Inputs:                                                                  
@@ -227,18 +221,20 @@ def mapNonLinear(x,p): # problem 5 (sammokka)
     # Xd - dimensions : (N x (p+1))  
     # where N is number of rows of X                                                       
     # IMPLEMENT THIS METHOD
-    
-    #notes: problem 5.
-    N=(x.shape)[0]
-    print(N)
-    a = np.empty([N,p+1], dtype=int)
+
+
+    N= x.shape[0]
+    Xd = np.empty((N,p+1))
+
     for i in range(p+1):
-        a[:,i] = np.power(x,i)
-    return a
+        Xd[:,i] = np.power(x,i)
+
+    return Xd
 
 # Main script
 
 # Problem 1
+print('Problem 1 \n')
 # load the sample data                                                                 
 if sys.version_info.major == 2:
     X,y,Xtest,ytest = pickle.load(open('sample.pickle','rb'))
@@ -265,15 +261,22 @@ xx[:,1] = xx2.ravel()
 zacc,zldares = ldaTest(means,covmat,xx,np.zeros((xx.shape[0],1)))
 plt.contourf(x1,x2,zldares.reshape((x1.shape[0],x2.shape[0])))
 plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
-
-plt.show()
+plt.title('LDA')
+plt.savefig('problem1_lda.jpg')
+print('LDA plot saved to problem1_lda.jpg')
+plt.clf()
 
 zacc,zqdares = qdaTest(means,covmats,xx,np.zeros((xx.shape[0],1)))
 plt.contourf(x1,x2,zqdares.reshape((x1.shape[0],x2.shape[0])))
 plt.scatter(Xtest[:,0],Xtest[:,1],c=ytest)
+plt.title('QDA')
+plt.savefig('problem1_qda.jpg')
+print('QDA plot saved to problem1_qda.jpg \n\n')
+plt.clf()
+
 
 # Problem 2
-
+print('Problem 2 \n')
 if sys.version_info.major == 2:
     X,y,Xtest,ytest = pickle.load(open('diabetes.pickle','rb'))
 else:
@@ -295,23 +298,46 @@ print('RMSE without intercept for training data '+str(mle_train))
 print('RMSE with intercept for training data '+str(mle_i_train))
 print('RMSE without intercept for testing data '+str(mle))
 print('RMSE with intercept for testing data '+str(mle_i))
-"""
+print('\n')
+
+
 # Problem 3
+print('Problem 3 \n')
+
 k = 101
 lambdas = np.linspace(0, 1, num=k)
 i = 0
-rmses3 = np.zeros((k,1))
+rmses3_test = np.zeros((k,1))
+rmses3_train = np.zeros((k,1))
 for lambd in lambdas:
     w_l = learnRidgeRegression(X_i,y,lambd)
-    rmses3[i] = testOLERegression(w_l,Xtest_i,ytest)
+    rmses3_test[i] = testOLERegression(w_l,Xtest_i,ytest)
+    rmses3_train[i] = testOLERegression(w_l,X_i,y)
     i = i + 1
-plt.plot(lambdas,rmses3)
+
+
+lambda_opt_3 = lambdas[np.argmin(rmses3_test)]
+
+plt.plot(lambda_opt_3,np.min(rmses3_test),'xr')
+plt.plot(lambdas,rmses3_test)
+plt.plot(lambdas,rmses3_train)
+plt.xlabel('lambda')
+plt.ylabel('rmse')
+plt.legend(('Optimal lambda '+str(lambda_opt_3),'Testing data','Training data'), loc = 'lower right')
+plt.title('Ridge regression (without gradient descent)')
+plt.savefig('problem3.jpg')
+print('Ridge regression plot saved to problem3.jpg \n\n')
+plt.clf()
+
 
 # Problem 4
+print('Problem 4 \n')
+
 k = 101
 lambdas = np.linspace(0, 1, num=k)
 i = 0
-rmses4 = np.zeros((k,1))
+rmses4_test = np.zeros((k,1))
+rmses4_train = np.zeros((k,1))
 opts = {'maxiter' : 100}    # Preferred value.                                                
 w_init = np.ones((X_i.shape[1],1))
 for lambd in lambdas:
@@ -319,22 +345,59 @@ for lambd in lambdas:
     w_l = minimize(regressionObjVal, w_init, jac=True, args=args,method='CG', options=opts)
     w_l = np.transpose(np.array(w_l.x))
     w_l = np.reshape(w_l,[len(w_l),1])
-    rmses4[i] = testOLERegression(w_l,Xtest_i,ytest)
+    rmses4_test[i] = testOLERegression(w_l,Xtest_i,ytest)
+    rmses4_train[i] = testOLERegression(w_l,X_i,y)
+
     i = i + 1
-plt.plot(lambdas,rmses4)
+
+
+lambda_opt_4 = lambdas[np.argmin(rmses4_test)]
+
+plt.plot(lambda_opt_4,np.min(rmses4_test),'xr')
+plt.plot(lambdas,rmses4_test)
+plt.plot(lambdas,rmses4_train)
+plt.xlabel('lambda')
+plt.ylabel('rmse')
+plt.legend(('Optimal lambda '+str(lambda_opt_4),'Testing data','Training data'), loc = 'lower right')
+plt.title('Ridge regression (with gradient descent)')
+plt.savefig('problem4.jpg')
+print('Gradient descent based ridge regression plot saved to problem4.jpg \n\n')
+plt.clf()
 
 
 # Problem 5
+print('Problem 5 \n')
+
 pmax = 7
-lambda_opt = lambdas[np.argmin(rmses4)]
-rmses5 = np.zeros((pmax,2))
+lambda_opt = lambdas[np.argmin(rmses4_test)]
+rmses5_test = np.zeros((pmax,2))
+rmses5_train = np.zeros((pmax,2))
 for p in range(pmax):
     Xd = mapNonLinear(X[:,2],p)
     Xdtest = mapNonLinear(Xtest[:,2],p)
     w_d1 = learnRidgeRegression(Xd,y,0)
-    rmses5[p,0] = testOLERegression(w_d1,Xdtest,ytest)
+    rmses5_test[p,0] = testOLERegression(w_d1,Xdtest,ytest)
     w_d2 = learnRidgeRegression(Xd,y,lambda_opt)
-    rmses5[p,1] = testOLERegression(w_d2,Xdtest,ytest)
-plt.plot(range(pmax),rmses5)
-plt.legend(('No Regularization','Regularization'))
-"""
+    rmses5_test[p,1] = testOLERegression(w_d2,Xdtest,ytest)
+    rmses5_train[p,0] = testOLERegression(w_d1,Xd,y)
+    rmses5_train[p,1] = testOLERegression(w_d2,Xd,y)
+
+
+plt.xlabel('p')
+plt.ylabel('RMSE')
+plt.plot(range(pmax),rmses5_test)
+plt.legend(('No Regularization ( on testing data )','Regularization ( on testing data )'))
+plt.savefig('problem5-testing.jpg')
+plt.clf()
+
+plt.xlabel('p')
+plt.ylabel('RMSE')
+plt.plot(range(pmax),rmses5_train)
+plt.legend(('No Regularization ( on training data )','Regularization ( on training data )'))
+plt.savefig('problem5-training.jpg')
+plt.clf()
+print('Non-linear regression plots saved to problem5-training.jpg and problem5-testing.jpg')
+
+
+
+
