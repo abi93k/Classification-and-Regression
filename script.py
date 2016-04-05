@@ -315,8 +315,18 @@ for lambd in lambdas:
     rmses3_train[i] = testOLERegression(w_l,X_i,y)
     i = i + 1
 
-
 lambda_opt_3 = lambdas[np.argmin(rmses3_test)]
+
+w_l = learnRidgeRegression(X_i,y,lambda_opt_3) # weights learnt by ridge regression with optimal lambda
+
+plt.plot(np.linspace(0,64,num = 65),w_i)
+plt.plot(np.linspace(0,64,num = 65),w_l)
+plt.legend(('OLE regression weights', 'Ridge regression weights \n(with optimal lambda 0.06)'))
+
+plt.title('Relative magnitude of weights learnt using OLE and RIDGE regression')
+plt.savefig('problem3-magnitude.jpg')
+print('Relative magnitude of weights plot saved to problem3-magnitude.jpg \n\n')
+plt.clf()
 
 plt.plot(lambda_opt_3,np.min(rmses3_test),'xr')
 plt.plot(lambdas,rmses3_test)
